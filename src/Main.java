@@ -1,13 +1,58 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-  //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-  // to see how IntelliJ IDEA suggests fixing it.
-  IO.println(String.format("Hello and welcome!"));
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Scanner;
 
-  for (int i = 1; i <= 5; i++) {
-    //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-    // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-    IO.println("i = " + i);
-  }
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        BillManager billManager = new BillManager();
+
+        boolean running = true;
+
+        while(running) {
+
+            IO.println("""
+                    1. Add Bill
+                    2. View Bills
+                    3. Exit
+                    """);
+
+            String choice = sc.nextLine();
+
+            if(choice.equals("1")) {
+                Bill bill = createBill(sc);
+                billManager.addBill(bill);
+            } else if (choice.equals("2")) {
+                billManager.getBills().forEach(bill -> {
+                    System.out.println(bill.getName());
+                    System.out.println(bill.getAmount());
+                    System.out.println(bill.getDate());
+                    System.out.println(bill.isPaid());
+                });
+
+            }else if(choice.equals("3")) {
+                running = false;
+            }
+
+        }
+    }
+
+
+    private static Bill createBill(Scanner sc) {
+
+        IO.println("Please enter bill name");
+        String name = sc.nextLine();
+
+        IO.println("Please enter bill amount");
+        BigDecimal amount = sc.nextBigDecimal();
+        sc.nextLine();
+
+        IO.println("Please enter bill date: YYYY-MM-DD");
+        LocalDate date = LocalDate.parse(sc.nextLine());
+
+        return new Bill(name, 0, amount, date, false);
+    }
 }
