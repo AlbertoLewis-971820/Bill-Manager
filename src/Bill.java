@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Bill {
@@ -9,6 +10,7 @@ public class Bill {
     private BigDecimal amount;
     private LocalDate date;
     private boolean paid;
+
     public Bill(String name, int id, BigDecimal amount, LocalDate date, boolean paid) {
         this.name = name;
         this.id = id;
@@ -42,6 +44,7 @@ public class Bill {
         this.date = date;
     }
     public boolean isPaid() {
+
         return paid;
     }
     public void setPaid(boolean paid) {

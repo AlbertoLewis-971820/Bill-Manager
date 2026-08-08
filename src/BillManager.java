@@ -2,6 +2,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BillManager {
 
@@ -16,16 +17,25 @@ public class BillManager {
         return bills;
     }
 
+    public void updateBill(Bill bill) {
+        for (Bill b : bills) {
+            if (Objects.equals(b.getName(), bill.getName())) {
+                b.setAmount(bill.getAmount());
+                b.setDate(bill.getDate());
+                b.setPaid(bill.isPaid());
+            }
+        }
+
+    }
+
     public Bill createBill(String name, BigDecimal amount, LocalDate date) {
 
-        Bill bill = new Bill(
+        return new Bill(
                 name,
                 nextId++,
                 amount,
                 date,
                 false
         );
-
-        return bill;
     }
 }
