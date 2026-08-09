@@ -15,6 +15,9 @@ public class Main {
 
         boolean running = true;
 
+
+
+
         while(running) {
 
             IO.println("""
@@ -23,10 +26,12 @@ public class Main {
                     1. Add Bill
                     2. View Bills
                     3. Update Bill
-                    4. Exit
+                    4. Add Paycheck
+                    5. Exit
                     ***********""");
 
             String choice = sc.nextLine();
+            BigDecimal payCheck;
 
             if(choice.equals("1")) {
 
@@ -40,7 +45,12 @@ public class Main {
 
             } else if (choice.equals("2")) {
                 billManager.getBills().forEach(bill -> {
+                    BigDecimal total = billManager.calculateAllBills();
                     System.out.println("************************");
+                    System.out.println("########################");
+                    System.out.println("Bills Total: $" + total);
+                    System.out.println("Paycheck Amount: $");
+                    System.out.println("########################");
                     System.out.println("Bill Name: " + bill.getName());
                     System.out.println("Bill Amount: $" + bill.getAmount());
                     System.out.println("Bill Due Date: " + bill.getDate().format(formatter));
@@ -70,6 +80,11 @@ public class Main {
 
 
             } else if (choice.equals("4")) {
+                IO.println("How much is your paycheck?");
+                payCheck = sc.nextBigDecimal();
+                sc.nextLine();
+                System.out.println("Paycheck Amount of: $" + payCheck + " added!");
+            } else if (choice.equals("5")) {
                 System.out.println("Goodbye!");
                 running = false;
             }

@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class BillManager {
 
+
     private List<Bill> bills = new ArrayList<>();
     private int nextId = 1;
 
@@ -15,6 +16,14 @@ public class BillManager {
 
     public List<Bill> getBills() {
         return bills;
+    }
+
+    public BigDecimal calculateAllBills() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Bill bill : bills) {
+            total = total.add(bill.getAmount());
+        }
+        return total;
     }
 
     public void updateBill(Bill bill) {
