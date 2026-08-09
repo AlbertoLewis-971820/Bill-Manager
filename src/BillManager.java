@@ -18,7 +18,7 @@ public class BillManager {
         return bills;
     }
 
-    public BigDecimal calculateAllBills() {
+    public BigDecimal calculateTotalBills() {
         BigDecimal total = BigDecimal.ZERO;
         for (Bill bill : bills) {
             total = total.add(bill.getAmount());

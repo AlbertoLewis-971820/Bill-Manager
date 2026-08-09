@@ -13,6 +13,8 @@ public class Main {
 
         BillManager billManager = new BillManager();
 
+        PayCheck payCheck = null;
+
         boolean running = true;
 
 
@@ -20,76 +22,121 @@ public class Main {
 
         while(running) {
 
-            IO.println("""
-                    ***********
-                    Welcome to the Bill System!
-                    1. Add Bill
-                    2. View Bills
-                    3. Update Bill
-                    4. Add Paycheck
-                    5. Exit
-                    ***********""");
+            while (running) {
 
-            String choice = sc.nextLine();
-            BigDecimal payCheck;
+                System.out.println();
+                System.out.println("==================================================");
+                System.out.println("                  BILL TRACKER");
+                System.out.println("==================================================");
 
-            if(choice.equals("1")) {
+                // You can add your paycheck summary here later
+                if (payCheck != null) {
+                    System.out.printf("Paycheck:                 $%.2f%n",
+                            payCheck.getPayCheckAmount());
 
-                try {
-                    Bill bill = createBill(sc);
-                    billManager.addBill(bill);
-                    System.out.println("Bill added successfully!");
-                }catch(DateTimeParseException e){
-                    System.out.println("Invalid date format please enter as DD/MM/YYYY");
+                    System.out.printf("Total Bills:              $%.2f%n",
+                            billManager.calculateTotalBills());
+
+                    System.out.printf("Money Remaining:          $%.2f%n",
+                            payCheck.getPayCheckAmount()
+                                    .subtract(billManager.calculateTotalBills()));
+                } else {
+                    System.out.println("Paycheck:                 Not Set");
                 }
 
-            } else if (choice.equals("2")) {
-                billManager.getBills().forEach(bill -> {
-                    BigDecimal total = billManager.calculateAllBills();
-                    System.out.println("************************");
-                    System.out.println("########################");
-                    System.out.println("Bills Total: $" + total);
-                    System.out.println("Paycheck Amount: $");
-                    System.out.println("########################");
-                    System.out.println("Bill Name: " + bill.getName());
-                    System.out.println("Bill Amount: $" + bill.getAmount());
-                    System.out.println("Bill Due Date: " + bill.getDate().format(formatter));
-                    System.out.println("Bill paid: " + bill.isPaid());
-                    System.out.println("************************");
-                });
+                System.out.println();
+                System.out.println("==================================================");
+                System.out.println("                    MAIN MENU");
+                System.out.println("==================================================");
 
-            }else if(choice.equals("3")) {
-                System.out.println("Enter bill name: ");
-                String name = sc.nextLine();
-                for (Bill bill : billManager.getBills()) {
-                    if (bill.getName().equals(name)) {
-                        IO.println("Enter amount to be paid: ");
-                        BigDecimal amount = sc.nextBigDecimal();
-                        if(bill.getAmount().compareTo(amount) <= 0) {
-                            bill.setPaid(true);
-                        }else {
-                            bill.setPaid(false);
-                        }
-                        bill.setAmount(bill.getAmount().subtract(amount));
+                System.out.println("1. Add Bill");
+                System.out.println("2. View Bills");
+                System.out.println("3. Update Bill");
+                System.out.println("4. Add / Update Paycheck");
+                System.out.println("5. Exit");
 
-                        bill.setDate(LocalDate.now());
+                System.out.println("--------------------------------------------------");
+                System.out.print("Enter your choice: ");
 
+                String choice = sc.nextLine();
+
+
+                if(choice.equals("1")) {
+
+                    try {
+                        Bill bill = createBill(sc);
+                        billManager.addBill(bill);
+                        System.out.println("Bill added successfully!");
+                    }catch(DateTimeParseException e){
+                        System.out.println("Invalid date format please enter as DD/MM/YYYY");
                     }
-                    billManager.updateBill(bill);
+
+                } else if (choice.equals("2")) {
+                    PayCheck finalPayCheck = payCheck;
+                    billManager.getBills().forEach(bill -> {
+                        BigDecimal total = billManager.calculateTotalBills();
+                        System.out.println("====================================================");
+                        System.out.println("====================================================");
+                        System.out.println("Bills Total: $" + total);
+                        if(finalPayCheck != null){
+                            System.out.println("Paycheck Amount: $" + finalPayCheck.getPayCheckAmount());
+                        }else{
+                            System.out.println("Please enter a paycheck first.");
+                        }
+
+                        System.out.println("====================================================");
+                        System.out.println("                  My Bills                          ");
+                        System.out.println("Bill: " + bill.getName());
+                        System.out.println("Bill Amount: $" + bill.getAmount());
+                        System.out.println("Bill Due Date: " + bill.getDate().format(formatter));
+                        System.out.println("Bill paid: " + bill.isPaid());
+                        System.out.println("====================================================");
+                    });
+
+                }else if(choice.equals("3")) {
+                    System.out.println("Enter bill name: ");
+                    String name = sc.nextLine();
+                    for (Bill bill : billManager.getBills()) {
+                        if (bill.getName().equals(name)) {
+                            IO.println("Enter amount to be paid: ");
+                            BigDecimal amount = sc.nextBigDecimal();
+                            if(bill.getAmount().compareTo(amount) <= 0) {
+                                bill.setPaid(true);
+                            }else {
+                                bill.setPaid(false);
+                            }
+                            bill.setAmount(bill.getAmount().subtract(amount));
+
+                            bill.setDate(LocalDate.now());
+
+                        }
+                        billManager.updateBill(bill);
+                    }
+
+
+                } else if (choice.equals("4")) {
+                    payCheck = addPaycheck(sc);
+
+                } else if (choice.equals("5")) {
+                    System.out.println("Goodbye!");
+                    running = false;
                 }
-
-
-            } else if (choice.equals("4")) {
-                IO.println("How much is your paycheck?");
-                payCheck = sc.nextBigDecimal();
-                sc.nextLine();
-                System.out.println("Paycheck Amount of: $" + payCheck + " added!");
-            } else if (choice.equals("5")) {
-                System.out.println("Goodbye!");
-                running = false;
             }
 
+
+
         }
+    }
+
+    private static PayCheck addPaycheck(Scanner sc){
+
+        IO.println("How much is your paycheck?");
+        BigDecimal payCheckAmount = sc.nextBigDecimal();
+        sc.nextLine();
+        System.out.println("Paycheck Amount of: $" + payCheckAmount + " added!");
+
+        return new PayCheck(payCheckAmount);
+
     }
 
 
@@ -102,7 +149,7 @@ public class Main {
         BigDecimal amount = sc.nextBigDecimal();
         sc.nextLine();
 
-        IO.println("Please enter bill date: DD/MM/YYYY");
+        IO.println("Please enter bill date: MM/DD/YYYY");
         LocalDate date = LocalDate.parse(sc.nextLine(), formatter);
 
         return new Bill(name, 0, amount, date, false);
