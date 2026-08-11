@@ -26,10 +26,21 @@ public class BillManager {
         return total;
     }
 
+    public BigDecimal calculateTotalPaid(){
+        BigDecimal total = BigDecimal.ZERO;
+        for (Bill bill : bills) {
+            total = total.add(bill.getPaidAmount());
+
+        }
+        return total;
+    }
+
+
     public void updateBill(Bill bill) {
         for (Bill b : bills) {
             if (Objects.equals(b.getName(), bill.getName())) {
                 b.setAmount(bill.getAmount());
+                b.setPaidAmount(bill.getPaidAmount());
                 b.setDate(bill.getDate());
                 b.setPaid(bill.isPaid());
             }
@@ -43,6 +54,7 @@ public class BillManager {
                 name,
                 nextId++,
                 amount,
+                BigDecimal.ZERO,
                 date,
                 false
         );

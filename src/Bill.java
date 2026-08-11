@@ -8,17 +8,29 @@ public class Bill {
     private String name;
     private int id = 1;
     private BigDecimal amount;
+
+
+
+    private BigDecimal paidAmount;
     private LocalDate date;
     private boolean paid;
 
-    public Bill(String name, int id, BigDecimal amount, LocalDate date, boolean paid) {
+    public Bill(String name, int id, BigDecimal amount, BigDecimal paidAmount, LocalDate date, boolean paid) {
         this.name = name;
         this.id = id;
         this.amount = amount;
         this.date = date;
         this.paid = paid;
+        this.paidAmount = paidAmount;
     }
 
+    public BigDecimal getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(BigDecimal paidAmount) {
+        this.paidAmount = paidAmount;
+    }
     public String getName() {
         return name;
     }

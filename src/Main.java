@@ -37,9 +37,12 @@ public class Main {
                     System.out.printf("Total Bills:              $%.2f%n",
                             billManager.calculateTotalBills());
 
+                    System.out.printf("Total Paid:              $%.2f%n",
+                            billManager.calculateTotalPaid());
+
                     System.out.printf("Money Remaining:          $%.2f%n",
                             payCheck.getPayCheckAmount()
-                                    .subtract(billManager.calculateTotalBills()));
+                                    .subtract(billManager.calculateTotalPaid()));
                 } else {
                     System.out.println("Paycheck:                 Not Set");
                 }
@@ -73,11 +76,19 @@ public class Main {
 
                 } else if (choice.equals("2")) {
                     PayCheck finalPayCheck = payCheck;
+                    PayCheck remainingPayCheck = payCheck;
                     billManager.getBills().forEach(bill -> {
                         BigDecimal total = billManager.calculateTotalBills();
+                        BigDecimal moneyRemaining = remainingPayCheck.getPayCheckAmount().subtract(billManager.calculateTotalPaid());
                         System.out.println("====================================================");
                         System.out.println("====================================================");
                         System.out.println("Bills Total: $" + total);
+                        if(remainingPayCheck != null) {
+                            System.out.println("Bills Remaining Amount: $" + moneyRemaining);
+                        }else{
+                            System.out.println("Bills Remaining: Not Set");
+                        }
+
                         if(finalPayCheck != null){
                             System.out.println("Paycheck Amount: $" + finalPayCheck.getPayCheckAmount());
                         }else{
@@ -100,12 +111,12 @@ public class Main {
                         if (bill.getName().equals(name)) {
                             IO.println("Enter amount to be paid: ");
                             BigDecimal amount = sc.nextBigDecimal();
-                            if(bill.getAmount().compareTo(amount) <= 0) {
+                            if (bill.getPaidAmount().compareTo(bill.getAmount()) >= 0) {
                                 bill.setPaid(true);
-                            }else {
+                            } else {
                                 bill.setPaid(false);
                             }
-                            bill.setAmount(bill.getAmount().subtract(amount));
+                            bill.setPaidAmount(bill.getPaidAmount().add(amount));
 
                             bill.setDate(LocalDate.now());
 
@@ -140,6 +151,7 @@ public class Main {
     }
 
 
+
     private static Bill createBill(Scanner sc) {
 
         IO.println("Please enter bill name");
@@ -152,6 +164,6 @@ public class Main {
         IO.println("Please enter bill date: MM/DD/YYYY");
         LocalDate date = LocalDate.parse(sc.nextLine(), formatter);
 
-        return new Bill(name, 0, amount, date, false);
+        return new Bill(name, 0, amount, BigDecimal.ZERO, date, false);
     }
 }
