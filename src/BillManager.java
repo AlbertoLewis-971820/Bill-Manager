@@ -8,7 +8,7 @@ public class BillManager {
 
 
     private List<Bill> bills = new ArrayList<>();
-    private int nextId = 1;
+    private Integer nextId = 1;
 
     public void addBill(Bill bill) {
         bills.add(bill);
@@ -35,21 +35,7 @@ public class BillManager {
         return total;
     }
 
-
-    public void updateBill(Bill bill) {
-        for (Bill b : bills) {
-            if (Objects.equals(b.getName(), bill.getName())) {
-                b.setAmount(bill.getAmount());
-                b.setPaidAmount(bill.getPaidAmount());
-                b.setDate(bill.getDate());
-                b.setPaid(bill.isPaid());
-            }
-        }
-
-    }
-
     public Bill createBill(String name, BigDecimal amount, LocalDate date) {
-
         return new Bill(
                 name,
                 nextId++,
@@ -59,4 +45,24 @@ public class BillManager {
                 false
         );
     }
+
+
+    public void updateBill(Bill bill) {
+        for (Bill b : bills) {
+            if (Objects.equals(b.getId(), bill.getId())) {
+                b.setId(bill.getId());
+                b.setAmount(bill.getAmount());
+                b.setPaidAmount(bill.getPaidAmount());
+                b.setDate(bill.getDate());
+                b.setPaid(bill.isPaid());
+            }
+        }
+
+    }
+
+    public boolean deleteBill(int id){
+        return bills.removeIf(bill -> bill.getId() == id);
+    }
+
+
 }
