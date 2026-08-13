@@ -17,6 +17,14 @@ public class Main {
 
 
             while (running) {
+                /*JsonStorage storage = new JsonStorage();
+
+                try {
+                    storage.testSaveBill();
+                    System.out.println("Bill saved successfully!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
 
                 displayMenu();
 
@@ -28,7 +36,7 @@ public class Main {
                     try {
                         Bill bill = createBill(sc);
                         billManager.addBill(bill);
-                        System.out.println("Bill added successfully!");
+                        System.out.println("main.java.Bill added successfully!");
                     }catch(DateTimeParseException e){
                         System.out.println("Invalid date format please enter as DD/MM/YYYY");
                     }
@@ -108,7 +116,7 @@ public class Main {
                         int id = sc.nextInt();
                         sc.nextLine();
                         if(billManager.deleteBill(id)) {
-                            System.out.println("Bill deleted successfully!");
+                            System.out.println("main.java.Bill deleted successfully!");
                         }else {
                             System.out.println("Invalid input please enter a valid id!");
                         }
@@ -127,7 +135,7 @@ public class Main {
 
     private static PayCheck addPaycheck(Scanner sc){
 
-        IO.println("How much is your paycheck?");
+        System.out.println("How much is your paycheck?");
         BigDecimal payCheckAmount = sc.nextBigDecimal();
         if(payCheckAmount.compareTo(BigDecimal.ZERO)<=0){
             System.out.println("Pay check amount can not be negative!");
@@ -144,16 +152,16 @@ public class Main {
     private static Bill createBill(Scanner sc) {
 
 
-        IO.println("Please enter bill name");
+        System.out.println("Please enter bill name");
         String name = sc.nextLine();
-        IO.println("Please enter bill amount");
+        System.out.println("Please enter bill amount");
         BigDecimal amount = sc.nextBigDecimal();
         if(amount.compareTo(BigDecimal.ZERO) < 0){
-            IO.println("Bill amount cannot be negative!");
+            System.out.println("main.java.Bill amount cannot be negative!");
         }
         sc.nextLine();
 
-        IO.println("Please enter bill date: MM/DD/YYYY");
+        System.out.println("Please enter bill date: MM/DD/YYYY");
         LocalDate date = LocalDate.parse(sc.nextLine(), formatter);
 
         return billManager.createBill(name, amount, date);
@@ -165,11 +173,11 @@ public class Main {
         System.out.println("                  BILL TRACKER");
         System.out.println("==================================================");
 
-        System.out.println("1. Add Bill");
+        System.out.println("1. Add main.java.Bill");
         System.out.println("2. View Bills");
-        System.out.println("3. Update Bill");
+        System.out.println("3. Update main.java.Bill");
         System.out.println("4. Add / Update Paycheck");
-        System.out.println("5. Delete Bill");
+        System.out.println("5. Delete main.java.Bill");
         System.out.println("6. Exit");
 
         System.out.println("--------------------------------------------------");
@@ -213,13 +221,13 @@ public class Main {
 
             billManager.getBills().forEach(bill -> {
 
-                System.out.println("Bill ID: " + bill.getId());
-                System.out.println("Bill Name: " + bill.getName());
-                System.out.println("Bill Amount: $" + bill.getAmount());
+                System.out.println("main.java.Bill ID: " + bill.getId());
+                System.out.println("main.java.Bill Name: " + bill.getName());
+                System.out.println("main.java.Bill Amount: $" + bill.getAmount());
                 System.out.println("Amount Paid: $" + bill.getPaidAmount());
-                System.out.println("Bill Due Date: " +
+                System.out.println("main.java.Bill Due Date: " +
                         bill.getDate().format(formatter));
-                System.out.println("Bill Paid: " + bill.isPaid());
+                System.out.println("main.java.Bill Paid: " + bill.isPaid());
 
                 System.out.println("--------------------------------------------------");
             });

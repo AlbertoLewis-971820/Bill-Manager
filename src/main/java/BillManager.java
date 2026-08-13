@@ -1,3 +1,4 @@
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,6 +9,15 @@ public class BillManager {
 
 
     private List<Bill> bills = new ArrayList<>();
+
+    public Integer getNextId() {
+        return nextId;
+    }
+
+    public void setNextId(Integer nextId) {
+        this.nextId = nextId;
+    }
+
     private Integer nextId = 1;
 
     public void addBill(Bill bill) {

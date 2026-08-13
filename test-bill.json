@@ -1,0 +1,8 @@
+{
+  "name" : "Electric",
+  "id" : 1,
+  "amount" : 150.00,
+  "paidAmount" : 20.00,
+  "date" : [ 2026, 8, 15 ],
+  "paid" : false
+}
