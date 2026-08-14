@@ -1,0 +1,23 @@
+{
+  "billManager" : {
+    "bills" : [ {
+      "name" : "Car",
+      "id" : 2,
+      "amount" : 481,
+      "paidAmount" : 0,
+      "date" : [ 2026, 9, 1 ],
+      "paid" : false
+    }, {
+      "name" : "test",
+      "id" : 4,
+      "amount" : 100,
+      "paidAmount" : 0,
+      "date" : [ 2000, 1, 1 ],
+      "paid" : false
+    } ],
+    "nextId" : 5
+  },
+  "payCheck" : {
+    "payCheckAmount" : 5000
+  }
+}

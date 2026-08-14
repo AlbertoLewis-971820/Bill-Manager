@@ -9,22 +9,16 @@ public class Main {
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     static PayCheck payCheck = null;
     static BillManager billManager = new BillManager();
+    static JsonStorage jsonStorage = new JsonStorage();
     public static void main(String[] args) {
 
+        loadData();
         Scanner sc = new Scanner(System.in);
 
         boolean running = true;
 
-
             while (running) {
-                /*JsonStorage storage = new JsonStorage();
 
-                try {
-                    storage.testSaveBill();
-                    System.out.println("Bill saved successfully!");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
 
                 displayMenu();
 
@@ -34,9 +28,10 @@ public class Main {
                 if(choice.equals("1")) {
 
                     try {
-                        Bill bill = createBill(sc);
+                        Bill bill = getBillFromUser(sc);
                         billManager.addBill(bill);
-                        System.out.println("main.java.Bill added successfully!");
+                        saveData();
+                        System.out.println("Bill added successfully!");
                     }catch(DateTimeParseException e){
                         System.out.println("Invalid date format please enter as DD/MM/YYYY");
                     }
@@ -88,6 +83,7 @@ public class Main {
                                     }
 
                                     bill.setDate(LocalDate.now());
+                                    saveData();
 
                                     System.out.println("Payment applied successfully!");
                                 }
@@ -108,6 +104,7 @@ public class Main {
 
                 } else if (choice.equals("4")) {
                     payCheck = addPaycheck(sc);
+                    saveData();
 
                 } else if (choice.equals("5")) {
                     displayBills();
@@ -116,7 +113,8 @@ public class Main {
                         int id = sc.nextInt();
                         sc.nextLine();
                         if(billManager.deleteBill(id)) {
-                            System.out.println("main.java.Bill deleted successfully!");
+                            saveData();
+                            System.out.println("Bill deleted successfully!");
                         }else {
                             System.out.println("Invalid input please enter a valid id!");
                         }
@@ -149,7 +147,7 @@ public class Main {
 
 
 
-    private static Bill createBill(Scanner sc) {
+    private static Bill getBillFromUser(Scanner sc) {
 
 
         System.out.println("Please enter bill name");
@@ -157,7 +155,7 @@ public class Main {
         System.out.println("Please enter bill amount");
         BigDecimal amount = sc.nextBigDecimal();
         if(amount.compareTo(BigDecimal.ZERO) < 0){
-            System.out.println("main.java.Bill amount cannot be negative!");
+            System.out.println("Bill amount cannot be negative!");
         }
         sc.nextLine();
 
@@ -173,15 +171,40 @@ public class Main {
         System.out.println("                  BILL TRACKER");
         System.out.println("==================================================");
 
-        System.out.println("1. Add main.java.Bill");
+        System.out.println("1. Add Bill");
         System.out.println("2. View Bills");
-        System.out.println("3. Update main.java.Bill");
+        System.out.println("3. Update Bill");
         System.out.println("4. Add / Update Paycheck");
-        System.out.println("5. Delete main.java.Bill");
+        System.out.println("5. Delete Bill");
         System.out.println("6. Exit");
 
         System.out.println("--------------------------------------------------");
         System.out.print("Enter your choice: ");
+    }
+
+    private static void loadData() {
+        try {
+            AppData appData = jsonStorage.loadAppData();
+            billManager = appData.getBillManager();
+            payCheck = appData.getPayCheck();
+
+            System.out.println("Bills loaded successfully!");
+        } catch (Exception e) {
+            System.out.println("No previous bills found, starting fresh.");
+        }
+    }
+
+    private static void saveData() {
+        try {
+            AppData appData = new AppData();
+            appData.setBillManager(billManager);
+            appData.setPayCheck(payCheck);
+            jsonStorage.saveAppData(appData);
+
+            System.out.println("Bills saved successfully!");
+        } catch (Exception e) {
+            System.out.println("Error saving bills: " + e.getMessage());
+        }
     }
 
 
@@ -221,13 +244,13 @@ public class Main {
 
             billManager.getBills().forEach(bill -> {
 
-                System.out.println("main.java.Bill ID: " + bill.getId());
-                System.out.println("main.java.Bill Name: " + bill.getName());
-                System.out.println("main.java.Bill Amount: $" + bill.getAmount());
+                System.out.println("Bill ID: " + bill.getId());
+                System.out.println("Bill Name: " + bill.getName());
+                System.out.println("Bill Amount: $" + bill.getAmount());
                 System.out.println("Amount Paid: $" + bill.getPaidAmount());
-                System.out.println("main.java.Bill Due Date: " +
+                System.out.println("Bill Due Date: " +
                         bill.getDate().format(formatter));
-                System.out.println("main.java.Bill Paid: " + bill.isPaid());
+                System.out.println("Bill Paid: " + bill.isPaid());
 
                 System.out.println("--------------------------------------------------");
             });

@@ -1,5 +1,7 @@
+AppData.class
 Main.class
-Bill.class
-BillManager.class
+JsonStorageTest.class
 JsonStorage.class
+Bill.class
 PayCheck.class
+BillManager.class

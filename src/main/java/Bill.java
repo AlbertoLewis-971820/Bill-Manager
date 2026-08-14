@@ -23,6 +23,11 @@ public class Bill {
         this.paidAmount = paidAmount;
     }
 
+    //Default constructor for Jackson
+    public Bill() {
+
+    }
+
     public BigDecimal getPaidAmount() {
         return paidAmount;
     }
