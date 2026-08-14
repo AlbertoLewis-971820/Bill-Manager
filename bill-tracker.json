@@ -8,16 +8,23 @@
       "date" : [ 2026, 9, 1 ],
       "paid" : false
     }, {
+      "name" : "Rent",
+      "id" : 5,
+      "amount" : 975,
+      "paidAmount" : 975,
+      "date" : [ 2026, 8, 13 ],
+      "paid" : true
+    }, {
       "name" : "test",
-      "id" : 4,
-      "amount" : 100,
+      "id" : 6,
+      "amount" : 400,
       "paidAmount" : 0,
-      "date" : [ 2000, 1, 1 ],
+      "date" : [ 2026, 1, 1 ],
       "paid" : false
     } ],
-    "nextId" : 5
+    "nextId" : 7
   },
   "payCheck" : {
-    "payCheckAmount" : 5000
+    "payCheckAmount" : 2000
   }
 }
